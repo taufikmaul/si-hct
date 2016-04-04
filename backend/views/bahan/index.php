@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\BahanMSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Bahan Ms';
+$this->title = 'Master Data Bahan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="bahan-m-index">
