@@ -30,6 +30,9 @@ class JualbarangT extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+
+    public $pelanggan_nama;
+
     public static function tableName()
     {
         return 'jualbarang_t';

@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
-use app\models\BarangM;
+use backend\models\BarangM;
 use backend\models\BarangMSearch;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
@@ -26,15 +26,18 @@ class BarangController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login','error'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index','create','view'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                 ],
+                'denyCallback' => function () {
+                    return Yii::$app->response->redirect(['site/login']);
+                },
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),

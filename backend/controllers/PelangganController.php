@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
-use app\models\PelangganM;
+use backend\models\PelangganM;
 use backend\models\PelangganMSearch;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
@@ -30,7 +30,7 @@ class PelangganController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index','create','view','update','delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
