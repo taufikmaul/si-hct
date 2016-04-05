@@ -1,7 +1,17 @@
 {
     "require": {
         "yiisoft/yii2-jui": "*",
+	"yiisoft/yii2-debug": "~2.0",
+	"yiisoft/yii2-gii": "~2.0",
+	"yiisoft/yii2-swiftmailer":"*",
+	"yiisoft/yii2-codeception":"*",
+	"phpspec/php-diff":"*",
+	"yiisoft/yii2-faker":"*",
+	"rmrevin/yii2-fontawesome":"*",
+	"cebe/yii2-gravatar":"*",
+	"dmstr/yii2-adminlte-asset":"*",
         "kartik-v/yii2-widget-typeahead": "*",
-        "kartik-v/yii2-widget-select2": "@dev"
+        "kartik-v/yii2-widget-select2": "@dev",
+        "wbraganca/yii2-dynamicform": "*"
     }
 }

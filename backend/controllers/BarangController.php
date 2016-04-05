@@ -30,7 +30,7 @@ class BarangController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index','create','view'],
+                        'actions' => ['logout', 'index','create','view','delete','update'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -86,7 +86,7 @@ class BarangController extends Controller
         $model = new BarangM();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->barang_id]);
+            return $this->redirect(['index', 'id' => $model->barang_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -105,7 +105,7 @@ class BarangController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->barang_id]);
+            return $this->redirect(['index', 'id' => $model->barang_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,

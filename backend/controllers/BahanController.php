@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
-use app\models\BahanM;
+use backend\models\BahanM;
 use backend\models\BahanMSearch;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
@@ -30,7 +30,7 @@ class BahanController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index','create','update','view'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
