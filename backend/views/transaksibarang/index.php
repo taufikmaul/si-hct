@@ -6,21 +6,18 @@ use yii\jui\DatePicker;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use backend\models\PelangganM;
+use kartik\select2\Select2;
+use kartik\typeahead\TypeaheadBasic;
+use yii\helpers\ArrayHelper;
 
 $this->title = 'Transaksi Order Barang';
 $this->params['breadcrumbs'][] = $this->title;
 
-//Data
-$dataPelanggan = PelangganM::find()->select(['pelanggan_nama as value','pelanggan_nama as label','pelanggan_id as id'])->asArray()->all();
-
+//Data & Default Data
+$dataPelanggan = array_merge(ArrayHelper::map(PelangganM::find()->all(), 'pelanggan_id', 'pelanggan_nama' ));
+$model->tgl_jual = date('d M Y');
 ?>
 
-<script>
-    jQuery('#jualbarangt-pelanggan_nama').autocomplete({"source":"","autoFill":true,"select":funtion(event,ui){
-        $('#jualbarangt-pelanggan_id').val(ui.item.id);
-    }
-    })
-</script>
 
 <div class="container-fluid">
     <div class="row">
@@ -31,17 +28,14 @@ $dataPelanggan = PelangganM::find()->select(['pelanggan_nama as value','pelangga
                 <div class="col-md-6">
                     <?php //echo $form->field($model,'pelanggan_id')->dropDownList($listPelanggan,['prompt'=>'- Pilih Pelanggan -','class'=>'form-control']); ?><!-- -->
                     <div class="form-group field-jualbarangt-pelanggan_id required">
-                        <label for="jualbarangt-pelanggan_id" class="control-label">Nama Client</label>
-                        <?= AutoComplete::widget([
-                                'model'=>$model,
-                                'attribute'=>'pelanggan_nama',
-                                'options'=>['class'=>'form-control'],
-                                'clientOptions'=>[
-                                    'source'=>$dataPelanggan,
-                                    'autoFill'=>true,
-                                    'select'=>new JsExpression("funtion(event,ui){
-                                        $('#jualbarangt-pelanggan_id').val(ui.item.id);
-                                    }")],
+<!--                        <label for="jualbarangt-pelanggan_id" class="control-label">Nama Client</label>-->
+                        <?= $form->field($model, 'pelanggan_id')->widget(Select2::classname(), [
+                            'data' => $dataPelanggan,
+                            'language' => 'en',
+                            'options' => ['placeholder' => 'Select a state ...'],
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
                         ]);
                         ?>
                         <?= Html::activeHiddenInput($model, 'pelanggan_id')?>
