@@ -19,6 +19,8 @@ use Yii;
  * @property string $cara_bayar
  * @property string $gambar
  * @property string $catatan
+ * @property string $tgl_ambil
+ * @property string $kode_transaksi
  *
  * @property PelangganM $pelanggan
  * @property SudahbayarR $sudahbayar
@@ -32,6 +34,7 @@ class JualbarangT extends \yii\db\ActiveRecord
      */
 
     public $pelanggan_nama;
+    public $barang,$sisa,$kode;
 
     public static function tableName()
     {
@@ -44,10 +47,10 @@ class JualbarangT extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pelanggan_id', 'sudahbayar_id', 'tgl_jual', 'total', 'tgl_penagihan', 'cara_bayar'], 'required'],
+            [['pelanggan_id', 'tgl_jual', 'total', 'tgl_penagihan', 'cara_bayar','kode_transaksi'], 'required'],
             [['pelanggan_id', 'sudahbayar_id', 'total', 'panjer', 'diskon', 'sisa'], 'integer'],
-            [['tgl_jual', 'tgl_penagihan'], 'safe'],
-            [['cara_bayar', 'gambar', 'catatan'], 'string'],
+            [['tgl_jual', 'tgl_penagihan','tgl_ambil'], 'safe'],
+            [['cara_bayar', 'gambar', 'catatan', 'kode_transaksi'], 'string'],
             [['pelanggan_id'], 'exist', 'skipOnError' => true, 'targetClass' => PelangganM::className(), 'targetAttribute' => ['pelanggan_id' => 'pelanggan_id']],
             [['sudahbayar_id'], 'exist', 'skipOnError' => true, 'targetClass' => SudahbayarR::className(), 'targetAttribute' => ['sudahbayar_id' => 'sudahbayar_id']],
         ];
@@ -59,15 +62,17 @@ class JualbarangT extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'jualbarang_id' => 'ID Jual Barang ',
-            'pelanggan_id' => 'ID Pelanggan ',
-            'sudahbayar_id' => 'ID Sudah Bayar ',
+            'jualbarang_id' => 'Jual Barang ',
+            'pelanggan_id' => 'Pelanggan ',
+            'sudahbayar_id' => 'Sudah Bayar ',
+            'kode_transaksi' => 'Kode Transaksi',
             'tgl_jual' => 'Tanggal Jual',
             'total' => 'Total',
             'panjer' => 'Panjer',
             'diskon' => 'Diskon',
             'sisa' => 'Sisa',
             'tgl_penagihan' => 'Taggal Penagihan',
+            'tgl_ambil'=>'Tanggal Pengambilan',
             'cara_bayar' => 'Cara Bayar',
             'gambar' => 'Gambar',
             'catatan' => 'Catatan',
@@ -104,5 +109,17 @@ class JualbarangT extends \yii\db\ActiveRecord
     public function getSudahbayarRs()
     {
         return $this->hasMany(SudahbayarR::className(), ['jualbarang_id' => 'jualbarang_id']);
+    }
+
+    public function getKodeTransaksi()
+    {
+        $modKodeLama = $this->findBySql('SELECT MAX(CAST(RIGHT(RTRIM(kode_transaksi),3) AS INT)) as kode FROM Jualbarang_t')->all();
+        if(!empty($modKodeLama)){
+            $kodeLama= (String)($modKodeLama+1); //Masih Bugs Disini
+            $kodeTransaksi = 'HCT'.date('ymd').str_pad($kodeLama,4, '0',STR_PAD_RIGHT);
+        }else{
+            $kodeTransaksi = 'HCT'.date('ymd').'0001';
+        }
+        return $kodeTransaksi;
     }
 }
