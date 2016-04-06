@@ -170,4 +170,13 @@ $model->tgl_jual = date('d M Y');
             }
         })
     }
+
+    function hitungAll(obj){
+        var harga_satuan = $(obj).parents('tr').find('input[name*="[harga_satuan]"]').val();
+        var qty_tindakan = $(obj).parents('tr').find('input[name*="[qty_jual]"]').val();
+
+        var jumlah = harga_satuan*qty_tindakan;
+
+        $(obj).parents('tr').find('input[name*="[jumlah]"]').val(jumlah);
+    }
 </script>

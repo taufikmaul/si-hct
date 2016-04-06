@@ -47,7 +47,7 @@ class JualbarangT extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pelanggan_id', 'sudahbayar_id', 'tgl_jual', 'total', 'tgl_penagihan', 'cara_bayar','kode_transaksi'], 'required'],
+            [['pelanggan_id', 'tgl_jual', 'total', 'tgl_penagihan', 'cara_bayar','kode_transaksi'], 'required'],
             [['pelanggan_id', 'sudahbayar_id', 'total', 'panjer', 'diskon', 'sisa'], 'integer'],
             [['tgl_jual', 'tgl_penagihan','tgl_ambil'], 'safe'],
             [['cara_bayar', 'gambar', 'catatan', 'kode_transaksi'], 'string'],
@@ -113,9 +113,10 @@ class JualbarangT extends \yii\db\ActiveRecord
 
     public function getKodeTransaksi()
     {
-        $modKodeLama = $this->findBySql('SELECT RIGHT(RTRIM(kode_transaksi),3) as kode FROM Jualbarang_t')->all();
+        $modKodeLama = $this->findBySql('SELECT MAX(CAST(RIGHT(RTRIM(kode_transaksi),3) AS INT)) as kode FROM Jualbarang_t')->all();
         if(!empty($modKodeLama)){
-            $kodeTransaksi = str_pad('HCT'.date('ymd'),13, '0',STR_PAD_RIGHT);
+            $kodeLama= (String)($modKodeLama+1); //Masih Bugs Disini
+            $kodeTransaksi = 'HCT'.date('ymd').str_pad($kodeLama,4, '0',STR_PAD_RIGHT);
         }else{
             $kodeTransaksi = 'HCT'.date('ymd').'0001';
         }

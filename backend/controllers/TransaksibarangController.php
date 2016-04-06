@@ -52,13 +52,49 @@ class TransaksibarangController extends Controller
         $modJualBrngDet = new JualbarangdetT();
 
         if(Yii::$app->request->post()) {
-            echo "<pre>";
-            print_r($_POST);
-            exit;
-            $model->load(Yii::$app->request->post());
+            $totalPenjualan = 0;
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try {
+                $model->load(Yii::$app->request->post());
+                $model->tgl_jual = Yii::$app->formatter->asDate($model->tgl_jual,'php:Y-m-d');
+                if(!empty($model->tgl_ambil))
+                    $model->tgl_ambil = Yii::$app->formatter->asDate($model->tgl_ambil,'php:Y-m-d');
+                if(!empty($model->tgl_penagihan))
+                    $model->tgl_penagihan = Yii::$app->formatter->asDate($model->tgl_penagihan,'php:Y-m-d');
+
+                if (isset(Yii::$app->request->post()['JualbarangdetT'])) {
+                    foreach (Yii::$app->request->post()['JualbarangdetT'] AS $i => $data) {
+                        $modJualBrngDet = new JualbarangdetT();
+                        $modJualBrngDet->attributes = $data;
+                        $totalPenjualan += $data['jumlah'];
+                        echo "<pre>";
+                        print_r($modJualBrngDet->attributes);
+                        exit;
+                        if($modJualBrngDet->validate())
+                            $modJualBrngDet->save();
+                    }
+                }
+                $model->total = $totalPenjualan;
+                if(empty($model->panjer))
+                    $model->panjer = 0;
+                if(empty($model->diskon))
+                    $model->diskon = 0;
+                if(empty($model->sisa))
+                    $model->sisa = 0;
+                if(empty($model->tgl_penagihan))
+                    $model->tgl_penagihan = date('Y-m-d',strtotime('+7 days'));
+                if($model->validate()){
+                    $model->save();
+                    $transaction->commit();
+                    Yii::$app->getSession()->setFlash('success', 'My success message!');
+                    return $this->redirect(['index', 'id' => $model->jualbarang_id]);
+                }
+            }catch(\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
         }
-
-
 
         return $this->render('index',[
             'modBarang'=>$modBarang,

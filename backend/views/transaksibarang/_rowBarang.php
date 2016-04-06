@@ -18,8 +18,8 @@ $dataBahan = ArrayHelper::map(BahanM::find()->all(), 'bahan_id', 'bahan_nama' );
     <td><?= $model->barang_nama; ?></td>
     <td><?= Html::activeTextInput($modJualBarangDet,'['.$urutan.']ukuran',['style'=>'width:100px;']); ?></td>
     <td><?= Html::activeDropDownList($modJualBarangDet,'['.$urutan.']bahan_id',$dataBahan,['prompt'=>'- Pilih Bahan - ']); ?></td>
-    <td><?= Html::activeTextInput($modJualBarangDet,'['.$urutan.']harga_satuan',['style'=>'width:100px;']); ?></td>
-    <td><?= Html::activeTextInput($modJualBarangDet,'['.$urutan.']qty_jual',['style'=>'width:30px;']); ?></td>
+    <td><?= Html::activeTextInput($modJualBarangDet,'['.$urutan.']harga_satuan',['style'=>'width:100px;','onChange'=>'hitungAll(this);']); ?></td>
+    <td><?= Html::activeTextInput($modJualBarangDet,'['.$urutan.']qty_jual',['style'=>'width:30px;','onChange'=>'hitungAll(this);']); ?></td>
     <td><?= Html::activeTextInput($modJualBarangDet,'['.$urutan.']jumlah',['style'=>'width:100px;']); ?></td>
     <td><?= Html::activeTextarea($modJualBarangDet,'['.$urutan.']keterangan') ?></td>
     <td></td>

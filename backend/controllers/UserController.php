@@ -87,7 +87,7 @@ class UserController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->password = !empty($model->password_baru)?md5($model->password_baru):$model->password;
-            $model->last_login = !empty($model->last_login)?$model->last_login:date('Y-m-d H:i:s');
+            $model->last_login = date('Y-m-d H:i:s');
           if($model->validate() && $model->save())
             return $this->redirect(['view', 'id' => $model->user_id]);
         } else {
