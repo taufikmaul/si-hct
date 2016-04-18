@@ -115,8 +115,8 @@ class JualbarangT extends \yii\db\ActiveRecord
     {
         $modKodeLama = $this->findBySql('SELECT MAX(CAST(RIGHT(RTRIM(kode_transaksi),3) AS INT)) as kode FROM Jualbarang_t')->all();
         if(!empty($modKodeLama)){
-            $kodeLama= (String)($modKodeLama+1); //Masih Bugs Disini
-            $kodeTransaksi = 'HCT'.date('ymd').str_pad($kodeLama,4, '0',STR_PAD_RIGHT);
+            $kodeLama= ($modKodeLama[0]->kode+1);
+            $kodeTransaksi = 'HCT'.date('ymd').str_pad($kodeLama,4, '0',STR_PAD_LEFT);
         }else{
             $kodeTransaksi = 'HCT'.date('ymd').'0001';
         }

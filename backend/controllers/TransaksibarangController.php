@@ -62,17 +62,9 @@ class TransaksibarangController extends Controller
                     $model->tgl_ambil = Yii::$app->formatter->asDate($model->tgl_ambil,'php:Y-m-d');
                 if(!empty($model->tgl_penagihan))
                     $model->tgl_penagihan = Yii::$app->formatter->asDate($model->tgl_penagihan,'php:Y-m-d');
-
                 if (isset(Yii::$app->request->post()['JualbarangdetT'])) {
                     foreach (Yii::$app->request->post()['JualbarangdetT'] AS $i => $data) {
-                        $modJualBrngDet = new JualbarangdetT();
-                        $modJualBrngDet->attributes = $data;
                         $totalPenjualan += $data['jumlah'];
-                        echo "<pre>";
-                        print_r($modJualBrngDet->attributes);
-                        exit;
-                        if($modJualBrngDet->validate())
-                            $modJualBrngDet->save();
                     }
                 }
                 $model->total = $totalPenjualan;
@@ -86,8 +78,15 @@ class TransaksibarangController extends Controller
                     $model->tgl_penagihan = date('Y-m-d',strtotime('+7 days'));
                 if($model->validate()){
                     $model->save();
+                    foreach (Yii::$app->request->post()['JualbarangdetT'] AS $i => $data) {
+                        $modJualBrngDet = new JualbarangdetT();
+                        $modJualBrngDet->attributes = $data;
+                        $modJualBrngDet->jualbarang_id = $model->jualbarang_id;
+                        if($modJualBrngDet->validate())
+                            $modJualBrngDet->save();
+                    }
                     $transaction->commit();
-                    Yii::$app->getSession()->setFlash('success', 'My success message!');
+                    Yii::$app->getSession()->setFlash('success', 'Sukses Menambahkan Transaksi !');
                     return $this->redirect(['index', 'id' => $model->jualbarang_id]);
                 }
             }catch(\Exception $e) {
